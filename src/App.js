@@ -3,13 +3,13 @@ import 'rbx/index.css';
 import { Button, Container, Title, Message } from 'rbx';
 
 import firebase from 'firebase/app';
-import 'firebase/database';
 import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 import CourseList from './components/CourseList';
+import db from './shared/FirebaseDatebase';
+import { timeParts } from './components/Course/times';
 
-const meetsPat = /^ *((?:M|Tu|W|Th|F)+) +(\d\d?):(\d\d) *[ -] *(\d\d?):(\d\d) *$/;
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -21,19 +21,13 @@ const uiConfig = {
   }
 };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCswQt2y-FdVL8t3Pt7dFOL_2lzKLIsZeQ",
-  authDomain: "course-scheduler-fe519.firebaseapp.com",
-  databaseURL: "https://course-scheduler-fe519.firebaseio.com",
-  projectId: "course-scheduler-fe519",
-  storageBucket: "course-scheduler-fe519.appspot.com",
-  messagingSenderId: "907270760093",
-  appId: "1:907270760093:web:1a4164c449285952a2d674",
-  measurementId: "G-99EX39BLYG"
-};
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref();
+const SignIn = () => (
+  <StyledFirebaseAuth
+    uiConfig={uiConfig}
+    firebaseAuth={firebase.auth()}
+  />
+);
 
 
 const Banner = ({ user, title }) => (
@@ -42,6 +36,7 @@ const Banner = ({ user, title }) => (
     <Title>{title || '[loading...]'}</Title>
   </React.Fragment>
 );
+
 
 const Welcome = ({ user }) => (
   <Message color="info">
@@ -54,36 +49,12 @@ const Welcome = ({ user }) => (
   </Message>
 );
 
-const SignIn = () => (
-  <StyledFirebaseAuth
-    uiConfig={uiConfig}
-    firebaseAuth={firebase.auth()}
-  />
-);
-
-
-
-
-
-
-
-const timeParts = meets => {
-  const [match, days, hh1, mm1, hh2, mm2] = meetsPat.exec(meets) || [];
-  return !match ? {} : {
-    days,
-    hours: {
-      start: hh1 * 60 + mm1 * 1,
-      end: hh2 * 60 + mm2 * 1
-    }
-  };
-};
-
-
 
 const addCourseTimes = course => ({
   ...course,
   ...timeParts(course.meets)
 });
+
 
 const addScheduleTimes = schedule => ({
   title: schedule.title,
@@ -117,4 +88,3 @@ const App = () => {
 };
 
 export default App;
-export { db };

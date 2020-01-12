@@ -1,24 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'rbx/index.css';
 import { Button } from 'rbx';
-import firebase from 'firebase/app';
 
 import { timeParts, hasConflict } from './times';
-import { db } from '../../App';
+import db from '../../shared/FirebaseDatebase';
+import { buttonColor, getCourseTerm, getCourseNumber } from '../../shared/utils';
 
-const terms = { F: 'Fall', W: 'Winter', S: 'Spring' };
 
-const buttonColor = selected => (
-    selected ? 'success' : null
-);
-
-const getCourseTerm = course => (
-    terms[course.id.charAt(0)]
-);
-
-const getCourseNumber = course => (
-    course.id.slice(1, 4)
-)
 
 const moveCourse = course => {
     const meets = prompt('Enter new meeting data, in this format:', course.meets);

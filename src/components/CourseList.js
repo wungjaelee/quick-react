@@ -3,12 +3,9 @@ import 'rbx/index.css';
 import { Button } from 'rbx';
 
 import Course from './Course/index';
+import { terms } from '../shared/constants';
+import { buttonColor, getCourseTerm } from '../shared/utils';
 
-const terms = { F: 'Fall', W: 'Winter', S: 'Spring' };
-
-const buttonColor = selected => (
-    selected ? 'success' : null
-);
 
 const useSelection = () => {
     const [selected, setSelected] = useState([]);
@@ -34,9 +31,6 @@ const TermSelector = ({ state }) => (
     </Button.Group>
 );
 
-const getCourseTerm = course => (
-    terms[course.id.charAt(0)]
-);
 
 const CourseList = ({ courses, user }) => {
     const [term, setTerm] = useState('Fall');
